@@ -1,0 +1,74 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: greeter-pipeline
+  labels:
+    app: greeter
+spec:
+  params: 
+    - name: git-url
+      description: Git URL Address
+      type: string
+      default: https://github.com/ppintogbm/liberty-greeter-sample.git
+    - name: git-revision
+      description: Git Revision to Checkout
+      type: string
+      default: master
+    - name: gitops-url
+      description: GitOps URL Address
+      type: string
+      deffault: https://github.com/ppintogbm/gitops-samples.git
+    - name: gitops-revision
+      description: GitOps Revision to Checkout
+      type: string
+      default: master
+    - name: gitops-context
+      description: GitOps Context Path
+      type: string
+      default: greeter
+  workspaces:
+    - name: source
+    - name: gitops
+    - name: settings
+  tasks:
+    - name: fetch-source
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+      workspaces:
+        - name: output
+          workspace: source
+    - name: fetch-gitops
+      params:
+        - name: url
+          value: $(params.gitops-url)
+        - name: revision
+          value: $(params.gitops-revision)
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+      workspaces:
+        - name: output
+          workspace: gitops
+    - name: build-source
+      runAfter:  
+        - fetch-source
+      taskRef:
+        name: maven
+        kind: ClusterTask
+      workspaces:
+        - name: source
+          workspace: source
+        - name: settings
+          workspace: settings
+    # - name: build-image
+    #   runAfter:
+    #     - build-source
+    #   workspaces:
+    #     - name: source
+    #       workspace: source
