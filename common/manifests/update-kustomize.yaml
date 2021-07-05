@@ -49,8 +49,8 @@ spec:
 
         if [ -f $(params.CONTEXT_PATH)/kustomize.yaml ]; then
           if [ -f $(params.CONTEXT_PATH)/kustomize.yaml.orig ]; then
-            mv $(params.CONTEXT_PATH)/kustomize.yaml $(params.CONTEXT_PATH)/kustomize.yaml.previous
-            cp $(params.CONTEXT_PATH)/kustomize.yaml.orig $(params.CONTEXT_PATH)/kustomize.yaml
+            mv -v $(params.CONTEXT_PATH)/kustomize.yaml $(params.CONTEXT_PATH)/kustomize.yaml.previous
+            cp -v $(params.CONTEXT_PATH)/kustomize.yaml.orig $(params.CONTEXT_PATH)/kustomize.yaml
           fi;
           echo $(params.CONTENT) | tee -a $(params.CONTEXT_PATH)/kustomize.yaml
         else
