@@ -51,14 +51,14 @@ spec:
           if [ -f $(params.CONTEXT_PATH)/kustomize.yaml.orig ]; then
             mv -v $(params.CONTEXT_PATH)/kustomize.yaml $(params.CONTEXT_PATH)/kustomize.yaml.previous
             cp -v $(params.CONTEXT_PATH)/kustomize.yaml.orig $(params.CONTEXT_PATH)/kustomize.yaml
-          fi;
-          cat <<EOF | tee -a $(params.CONTEXT_PATH)/kustomize.yaml
-          "$(params.CONTENT)"
+          fi
+          cat <<EOF > $(params.CONTEXT_PATH)/kustomize.yaml
+          $(params.CONTENT)"
           EOF
         else
           echo "Invalid Context Path or not Kustomize File present"
           exit 1
-        fi;
+        fi
 
         git commit -am "Updated by pipelinerun"
 
