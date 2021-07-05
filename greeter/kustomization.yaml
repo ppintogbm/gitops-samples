@@ -1,4 +1,6 @@
 resources:
-  - manifests/*yaml
-  - ci/*yaml
-  - ../common/*.yaml
+  - manifests/deployment.yaml
+  - manifests/service.yaml
+  - manifests/imagestream.yaml
+  - ci/pipeline.yaml
+  - ../common
