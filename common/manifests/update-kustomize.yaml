@@ -52,7 +52,9 @@ spec:
             mv -v $(params.CONTEXT_PATH)/kustomize.yaml $(params.CONTEXT_PATH)/kustomize.yaml.previous
             cp -v $(params.CONTEXT_PATH)/kustomize.yaml.orig $(params.CONTEXT_PATH)/kustomize.yaml
           fi;
-          echo $(params.CONTENT) | tee -a $(params.CONTEXT_PATH)/kustomize.yaml
+          cat <<EOF | tee -a $(params.CONTEXT_PATH)/kustomize.yaml
+          "$(params.CONTENT)"
+          EOF
         else
           echo "Invalid Context Path or not Kustomize File present"
           exit 1

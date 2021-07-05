@@ -96,11 +96,11 @@ spec:
           value: cluster/greeter/
         - name: CONTENT
           value: | 
-             ## Update to add image
-             images:
-               - name: greeter
-                 newName: $(tasks.get-image-repo.results.output)
-                 digest: $(tasks.build-image.results.IMAGE_DIGEST)
+            ## Update to add image
+            images:
+              - name: greeter
+                newName: $(tasks.get-image-repo.results.output)
+                digest: $(tasks.build-image.results.IMAGE_DIGEST)
       runAfter:
         - build-image
         - fetch-gitops
