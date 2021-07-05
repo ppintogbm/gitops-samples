@@ -3,4 +3,4 @@ resources:
   - manifests/service.yaml
   - manifests/imagestream.yaml
   - ci/pipeline.yaml
-  - ../common
+  - ../common/manifests/openshift-client-with-output.yaml

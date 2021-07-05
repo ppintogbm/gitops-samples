@@ -66,12 +66,19 @@ spec:
           workspace: source
         - name: maven-settings
           workspace: settings
+    - name: get-image-repo 
+      params:
+        - name: ARGS
+          value: get imagestream greeter --output=jsonpath='{.status.dockerImageRepository}'
+      taskRef:
+        name: openshift-client-with-output
     - name: build-image
       params:
         - name: IMAGE
-          value: test
+          value: $(tasks.get-image-repo.results.output)
       runAfter:
         - build-source
+        - get-image-repo
       taskRef:
         name: buildah
         kind: ClusterTask

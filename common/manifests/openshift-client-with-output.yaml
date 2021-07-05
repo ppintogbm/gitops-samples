@@ -5,17 +5,14 @@ metadata:
     tekton.dev/displayName: openshift client
     tekton.dev/pipelines.minVersion: 0.12.1
     tekton.dev/tags: cli
-  name: client-with-workspace
+  name: openshift-client-with-output
   labels:
     app.kubernetes.io/version: '0.1'
     operator.tekton.dev/provider-type: redhat
 spec:
-  workspaces:
-    - name: source
-      description: Location for manifests
   results:
-    - name: resources
-      description: Save the list of resources created
+    - name: output
+      description: output from CLI
   description: >-
     This task runs commands against the cluster where the task run is being
     executed.
@@ -24,7 +21,7 @@ spec:
     OpenShift CLI that complements kubectl for simplifying deployment and
     configuration applications on OpenShift.
   params:
-    - default: oc $@ --output=json | tee $(results.resources.path)
+    - default: oc $@ | tee $(results.output.path)
       description: The OpenShift CLI arguments to run
       name: SCRIPT
       type: string

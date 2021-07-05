@@ -1,2 +1,3 @@
 resources:
-  - "manifests/client-with-workspace.yaml"
+  - "manifests/openshift-client-with-output.yaml"
+  - "manifests/jq.yaml"
