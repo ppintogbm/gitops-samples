@@ -25,7 +25,7 @@ spec:
         Git user email for performing git operation.
       name: GIT_USER_EMAIL
       type: string
-    - descripton: | 
+    - description: | 
         Context Path from kustomize to append
       name: CONTEXT_PATH
       type: string
