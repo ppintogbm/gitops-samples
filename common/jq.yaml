@@ -1,0 +1,39 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: jq
+  annotations:
+    tekton.dev/displayName: jq
+    tekton.dev/tags: cli
+spec:
+  results:
+    - name: jq-output
+      description: Save the list of resources created
+  description: >-
+    Task to use jq for differente purposes.
+  params:
+    - default: "."
+      description: The JSON filter for JQ
+      type: string
+      name: FILTER
+    # - default: 
+    #     - "-r"
+    #   description: The FLAGS for JQ
+    #   type: array
+    #   name: FLAGS
+    - default: "{}"
+      description: The JSON input for JQ
+      type: string
+      name: JSON
+  resources:
+    inputs:
+      - name: source
+        optional: true
+        type: git
+  steps:
+    - image: 'docker.io/stedolan/jq'
+      name: jq
+      resources: {}
+      script: | 
+        #!/usr/bin/env bash
+        echo -n $(params.JSON) | jq '$(params.FILTER)' | tee $(results.jq-output.path)
