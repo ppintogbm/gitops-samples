@@ -69,7 +69,8 @@ spec:
     - name: get-image-repo 
       params:
         - name: ARGS
-          value: get imagestream greeter --output=jsonpath='{.status.dockerImageRepository}'
+          value: 
+            - get imagestream greeter --output=jsonpath='{.status.dockerImageRepository}'
       taskRef:
         name: openshift-client-with-output
     - name: build-image
