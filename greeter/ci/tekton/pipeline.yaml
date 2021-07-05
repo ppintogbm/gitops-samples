@@ -64,11 +64,17 @@ spec:
       workspaces:
         - name: source
           workspace: source
-        - name: settings
+        - name: maven-settings
           workspace: settings
-    # - name: build-image
-    #   runAfter:
-    #     - build-source
-    #   workspaces:
-    #     - name: source
-    #       workspace: source
+    - name: build-image
+      params:
+        - name: IMAGE
+          value: test
+      runAfter:
+        - build-source
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      workspaces:
+        - name: source
+          workspace: source
