@@ -47,8 +47,8 @@ spec:
         git config --global user.email "$(params.GIT_USER_EMAIL)"
         git config --global user.name "$(params.GIT_USER_NAME)"
 
-        if [ -f $(params.CONTEXT_PATH)/kustomize.yaml ]; do
-          if [ -f $(params.CONTEXT_PATH)/kustomize.yaml.orig ]; do
+        if [ -f $(params.CONTEXT_PATH)/kustomize.yaml ]; then
+          if [ -f $(params.CONTEXT_PATH)/kustomize.yaml.orig ]; then
             mv $(params.CONTEXT_PATH)/kustomize.yaml $(params.CONTEXT_PATH)/kustomize.yaml.previous
             cp $(params.CONTEXT_PATH)/kustomize.yaml.orig $(params.CONTEXT_PATH)/kustomize.yaml
           done;
