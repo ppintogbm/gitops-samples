@@ -17,7 +17,7 @@ spec:
     - name: gitops-url
       description: GitOps URL Address
       type: string
-      deffault: https://github.com/ppintogbm/gitops-samples.git
+      default: https://github.com/ppintogbm/gitops-samples.git
     - name: gitops-revision
       description: GitOps Revision to Checkout
       type: string
