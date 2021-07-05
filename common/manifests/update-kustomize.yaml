@@ -1,0 +1,76 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: update-kustomize
+spec:
+  description: >-
+    This task can be used to perform git operations.
+
+    Git command that needs to be run can be passed as a script to the task.This
+    task needs authentication to git in order to push after the git operation.
+  params:
+    - default: >-
+        docker.io/alpine/git:v2.26.2@sha256:23618034b0be9205d9cc0846eb711b12ba4c9b468efdd8a59aac1d7b1a23363f
+      description: |
+        The base image for the task.
+      name: BASE_IMAGE
+      type: string
+    - default: ''
+      description: |
+        Git user name for performing git operation.
+      name: GIT_USER_NAME
+      type: string
+    - default: ''
+      description: |
+        Git user email for performing git operation.
+      name: GIT_USER_EMAIL
+      type: string
+    - descripton: | 
+        Context Path from kustomize to append
+      name: CONTEXT_PATH
+      type: string
+    - default: "##Added with Tekton"
+      description: | 
+          Content to append to kustomize
+      name: CONTENT
+      type: string      
+  results:
+    - description: The precise commit SHA after the git operation.
+      name: commit
+  steps:
+    - image: $(params.BASE_IMAGE)
+      name: git
+      resources: {}
+      script: |
+
+        # Setting up the config for the git.
+        git config --global user.email "$(params.GIT_USER_EMAIL)"
+        git config --global user.name "$(params.GIT_USER_NAME)"
+
+        if [ -f $(params.CONTEXT_PATH)/kustomize.yaml ]; do
+          if [ -f $(params.CONTEXT_PATH)/kustomize.yaml.orig ]; do
+            mv $(params.CONTEXT_PATH)/kustomize.yaml $(params.CONTEXT_PATH)/kustomize.yaml.previous
+            cp $(params.CONTEXT_PATH)/kustomize.yaml.orig $(params.CONTEXT_PATH)/kustomize.yaml
+          done;
+          echo $(params.CONTENT) | tee -a $(params.CONTEXT_PATH)/kustomize.yaml
+        else
+          echo "Invalid Context Path or not Kustomize File present"
+          exit 1
+        done;
+
+        git commit -am "Updated by pipelinerun"
+
+        RESULT_SHA="$(git rev-parse HEAD | tr -d '\n')"
+        EXIT_CODE="$?"
+        if [ "$EXIT_CODE" != 0 ]
+        then
+          exit $EXIT_CODE
+        fi
+        # Make sure we don't add a trailing newline to the result!
+        echo -n "$RESULT_SHA" > $(results.commit.path)
+
+        git push origin/master
+      workingDir: "$(workspaces.source.path)"
+  workspaces:
+    - description: A workspace that contains the fetched git repository.
+      name: source

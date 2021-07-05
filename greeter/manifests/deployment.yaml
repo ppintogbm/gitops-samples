@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: greeter
-        image: "hello-world"
+        image: "greeter"
         resources:
           limits:
             memory: "128Mi"

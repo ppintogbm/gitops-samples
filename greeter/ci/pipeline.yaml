@@ -86,3 +86,26 @@ spec:
       workspaces:
         - name: source
           workspace: source
+    - name: update-gitops-repo
+      params:
+        - name: GIT_USER_NAME
+          value: Tekton
+        - name: GIT_USER_EMAIL
+          value: Tekton@openshift.local
+        - name: CONTEXT_PATH
+          value: cluster/greeter/
+        - name: CONTENT
+          value: | 
+            ## Update to add image
+            images:
+              - name: greeter
+                newName: $(tasks.get-image-repo.results.output)
+                digest: $(tasks.build-image.results.IMAGE_DIGEST)
+      runAfter:
+        - build-image
+        - fetch-gitops
+      taskRef:
+        name: update-kustomize
+      workspaces:
+        - name: source
+          workspace: gitops
