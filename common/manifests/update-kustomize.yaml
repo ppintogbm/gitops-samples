@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: update-kustomize
+  name: update-kustomization
 spec:
   description: >-
     This task can be used to perform git operations.
@@ -26,12 +26,12 @@ spec:
       name: GIT_USER_EMAIL
       type: string
     - description: | 
-        Context Path from kustomize to append
+        Context Path from kustomization to append
       name: CONTEXT_PATH
       type: string
     - default: "##Added with Tekton"
       description: | 
-          Content to append to kustomize
+          Content to append to kustomization
       name: CONTENT
       type: string      
   results:
@@ -47,16 +47,16 @@ spec:
         git config --global user.email "$(params.GIT_USER_EMAIL)"
         git config --global user.name "$(params.GIT_USER_NAME)"
 
-        if [ -f $(params.CONTEXT_PATH)/kustomize.yaml ]; then
-          if [ -f $(params.CONTEXT_PATH)/kustomize.yaml.orig ]; then
-            mv -v $(params.CONTEXT_PATH)/kustomize.yaml $(params.CONTEXT_PATH)/kustomize.yaml.previous
-            cp -v $(params.CONTEXT_PATH)/kustomize.yaml.orig $(params.CONTEXT_PATH)/kustomize.yaml
+        if [ -f $(params.CONTEXT_PATH)/kustomization.yaml ]; then
+          if [ -f $(params.CONTEXT_PATH)/kustomization.yaml.orig ]; then
+            mv -v $(params.CONTEXT_PATH)/kustomization.yaml $(params.CONTEXT_PATH)/kustomization.yaml.previous
+            cp -v $(params.CONTEXT_PATH)/kustomization.yaml.orig $(params.CONTEXT_PATH)/kustomization.yaml
           fi
-          cat > $(params.CONTEXT_PATH)/kustomize.yaml <<EOF
+          cat > $(params.CONTEXT_PATH)/kustomization.yaml <<EOF
           $(params.CONTENT)"
         EOF
         else
-          echo "Invalid Context Path or not Kustomize File present"
+          echo "Invalid Context Path or not kustomization File present"
           exit 1
         fi
 

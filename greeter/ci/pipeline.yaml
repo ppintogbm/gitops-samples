@@ -105,7 +105,7 @@ spec:
         - build-image
         - fetch-gitops
       taskRef:
-        name: update-kustomize
+        name: update-kustomization
       workspaces:
         - name: source
           workspace: gitops
