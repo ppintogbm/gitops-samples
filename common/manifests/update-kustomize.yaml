@@ -52,7 +52,7 @@ spec:
             mv -v $(params.CONTEXT_PATH)/kustomization.yaml $(params.CONTEXT_PATH)/kustomization.yaml.previous
             cp -v $(params.CONTEXT_PATH)/kustomization.yaml.orig $(params.CONTEXT_PATH)/kustomization.yaml
           fi
-          cat > $(params.CONTEXT_PATH)/kustomization.yaml <<EOF
+          cat >> $(params.CONTEXT_PATH)/kustomization.yaml <<EOF
           $(params.CONTENT)"
         EOF
         else
@@ -71,7 +71,7 @@ spec:
         # Make sure we don't add a trailing newline to the result!
         echo -n "$RESULT_SHA" > $(results.commit.path)
 
-        git push origin/master HEAD:master
+        git push origin HEAD:master
       workingDir: "$(workspaces.source.path)"
   workspaces:
     - description: A workspace that contains the fetched git repository.
